@@ -21,32 +21,60 @@
             <h3 fxFlex="0 0 auto">Material Input</h3>
             <mat-form-field fxFlex="0 0 auto">
                 <input matInput pending-onfocus formControlName="name" placeholder="Name" autocomplete="off">
+<!--
                 <mat-error *ngIf="!!getError('name')">{{ getError('name') }}</mat-error>
+-->
+                <mat-error *ngIf="!!form.get('name').errors">
+                    <deja-validator-messages controlName="name" [control]="form.get('name')" [displayErrorMessageOnly]="false"></deja-validator-messages>
+<!--
+                    <deja-validator-messages controlName="name" [errorMessageFn]="getValidationErrorMessage()" [control]="form.get('name')"></deja-validator-messages>
+-->
+                </mat-error>
             </mat-form-field>
             <h3 fxFlex="0 0 auto">Deja Select</h3>
             <deja-select fxFlex="0 0 auto" placeholder="Country" selectionClearable formControlName="country" textField="naqme" valueField="code" [models]="countries">
-                <ng-template #errorTemplate *ngIf="!!getError('country')">
-                    <span>{{ getError('country') }}</span>
+                <ng-template #errorTemplate *ngIf="!!form.get('country').errors">
+                    <deja-validator-messages [control]="form.get('country')"></deja-validator-messages>
                 </ng-template>
+<!--
+                <ng-template #errorTemplate *ngIf="!!countryFormControl.errors">
+                    <deja-validator-messages [control]="countryFormControl"></deja-validator-messages>
+                </ng-template>
+-->
             </deja-select>
             <h3 fxFlex="0 0 auto">Deja Select (Multiselect)</h3>
             <deja-select fxFlex="0 0 auto" type="multiselect" placeholder="Visited Countries" formControlName="visitedCountries" textField="naqme" valueField="code" [models]="countries">
-                <ng-template #errorTemplate *ngIf="!!getError('visitedCountries')">
-                    <span>{{ getError('visitedCountries') }}</span>
+                <ng-template #errorTemplate *ngIf="!!form.get('visitedCountries').errors">
+                    <deja-validator-messages [control]="form.get('visitedCountries')"></deja-validator-messages>
                 </ng-template>
+<!--
+                <ng-template #errorTemplate *ngIf="!!visitedCountriesFormControl.errors">
+                    <deja-validator-messages [control]="visitedCountriesFormControl"></deja-validator-messages>
+                </ng-template>
+-->
             </deja-select>
             <h3 fxFlex="0 0 auto">Deja Date Picker</h3>
             <div class="placeholder" fxFlex="0 0 auto">Birth Date</div>
             <deja-date-picker formControlName="birthDate">
-                <ng-template #errorTemplate *ngIf="!!getError('birthDate')">
-                    <span>{{ getError('birthDate') }}</span>
+                <ng-template #errorTemplate *ngIf="!!form.get('birthDate').errors">
+                    <deja-validator-messages [control]="form.get('birthDate')"></deja-validator-messages>
                 </ng-template>
+<!--
+                <ng-template #errorTemplate *ngIf="!!birthDate.errors">
+                    <deja-validator-messages [control]="birthDateFormControl"></deja-validator-messages>
+                </ng-template>
+-->
             </deja-date-picker>
             <h3 fxFlex="0 0 auto">Deja Select</h3>
             <deja-select fxFlex="0 0 auto" placeholder="Prefered Juice" selectionClearable formControlName="preferedJuice" [models]="fructs">
-                <ng-template #errorTemplate *ngIf="!!getError('preferedJuice')">
-                    <span>{{ getError('preferedJuice') }}</span>
-                </ng-template>                
+                <ng-template #errorTemplate *ngIf="!!form.get('preferedJuice').errors">
+                    <deja-validator-messages [control]="form.get('preferedJuice')"></deja-validator-messages>
+                </ng-template>
+<!--
+                <ng-template #errorTemplate *ngIf="!!preferedJuiceFormControl.errors">
+                    <deja-validator-messages [control]="preferedJuiceFormControl"></deja-validator-messages>
+                </ng-template>
+-->
             </deja-select>
             <h3 fxFlex="0 0 auto">Deja TreeList (String list and model)</h3>
             <deja-tree-list fxFlex="0 0 auto" formControlName="preferedFruct" [models]="fructs"></deja-tree-list>
@@ -60,17 +88,26 @@
             <div class="placeholder" fxFlex="0 0 auto">House Color</div>
             <deja-color-picker fxFlex="0 0 auto" [colors]="materialColors.colors" formControlName="color2"></deja-color-picker>
             <h3 fxFlex="0 0 auto">Deja Chips</h3>
-            <div [class.error]="!!getError('skillsErrors')" class="placeholder" fxFlex="0 0 auto">Skills</div>
+            <div [class.error]="!!form.get('skillsErrors').errors" class="placeholder" fxFlex="0 0 auto">Skills</div>
             <deja-chips fxFlex="0 0 auto" formControlName="skills"></deja-chips>
             <mat-form-field fxFlex="0 0 auto" id="addskill">
                 <input formControlName="skillsErrors" #skill matInput (keydown)="onSkillKeyDown($event)" placeholder="Add Skill" autocomplete="off">
                 <div matSuffix><i (click)="onAddSkill(skill)" class="material-icons matSuffix">add</i></div>
-                <mat-error *ngIf="!!getError('skillsErrors')">{{ getError('skillsErrors') }}</mat-error>
+                <mat-error *ngIf="!!form.get('skillsErrors').errors">
+                    <deja-validator-messages [control]="form.get('skillsErrors')"></deja-validator-messages>
+                </mat-error>
+<!--
+                <mat-error *ngIf="!!skillsErrorsFormControl.errors">
+                    <deja-validator-messages [control]="skillsErrorsFormControl"></deja-validator-messages>
+                </mat-error>
+-->
             </mat-form-field>
             <h3 fxFlex="0 0 auto">Deja Editable</h3>
-            <div [class.error]="!!getError('remark')" class="placeholder" fxFlex="0 0 auto">Remark</div>
+            <div [class.error]="!!form.get('remark').errors" class="placeholder" fxFlex="0 0 auto">Remark</div>
             <span [deja-editable]="true" formControlName="remark" multiline></span>
-            <span class="error errorfld" *ngIf="!!getError('remark')">{{ getError('remark') }}</span>
+            <span class="error errorfld" *ngIf="!!form.get('remark').errors">
+                <deja-validator-messages [control]="form.get('remark')"></deja-validator-messages>
+            </span>
             <h3 fxFlex="0 0 auto">Deja Range</h3>
             <deja-range [readOnly]="false" [step]="1" formControlName="ranges"></deja-range>
         </form>

@@ -134,4 +134,21 @@ export class JsonUtils {
             }
         });
     }
+
+    /**
+     * returns a map with the keys beings the object's member's names and the values being the member values.
+     *
+     * @param jsonObject
+     * @returns {Map<any, any>}
+     */
+    public static jsonObjectToMap(jsonObject: any) {
+        if (!jsonObject) {
+            return undefined;
+        }
+        const map = new Map();
+        for (const key of Object.keys(jsonObject)) {
+            map.set(key, jsonObject[key]);
+        }
+        return map;
+    }
 }

@@ -30,5 +30,7 @@ export class DejaChildValidatorModule { }
 
 export * from './validation-error';
 export * from './validation-messages';
+export * from './validators';
+export * from './validator-error.model';
 export * from './date-validator';
 export * from './child-validator.directive';

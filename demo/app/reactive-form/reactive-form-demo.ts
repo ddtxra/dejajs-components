@@ -7,7 +7,7 @@
  */
 
 import { AfterContentInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { CountriesService } from '../services/countries.service';
@@ -17,6 +17,7 @@ import { Country } from '../services/countries.service';
 import { Store } from '@ngrx/store';
 import { KeyCodes } from '../../../src/common/core/keycodes.enum';
 import { MaterialColors } from '../../../src/common/core/style/material-colors';
+import {DejaValidators} from '../../../src/common/core/validation/validators';
 import { IappState } from './model/app-state.interface';
 import { IUser } from './model/user.interface';
 import { UserService } from './service/user.service';
@@ -89,9 +90,9 @@ export class ReactiveFormDemoComponent implements AfterContentInit, OnInit, OnDe
         this.countries = countriesService.getCountries$();
 
         this.form = fb.group({
-            name: [{ value: '', disabled: this.readonly }, Validators.compose([Validators.required, Validators.maxLength(20)])],
-            country: [{ value: null, disabled: this.readonly }, Validators.required],
-            visitedCountries: [{ value: [], disabled: this.readonly }, Validators.required],
+            name: [{ value: '', disabled: this.readonly }, Validators.compose([Validators.pattern(/^[a-zA-Z0-9]*$/), DejaValidators.wrapper(Validators.required,'Un nom est requis'), DejaValidators.wrapper(Validators.maxLength(20), 'Le nom ne doit pas dépasser 20 caractères')])],
+            country: [{ value: null, disabled: this.readonly }, DejaValidators.wrapper(Validators.required, 'Un pays est requis')],
+            visitedCountries: [{ value: [], disabled: this.readonly }, DejaValidators.wrapper(Validators.required, 'Un pays est requis')],
             birthDate: [{ value: null, disabled: this.readonly }, Validators.required],
             preferedJuice: [{ value: null, disabled: this.readonly }, Validators.required],
             preferedFruct: [{ value: null, disabled: this.readonly }, Validators.required],
@@ -188,6 +189,28 @@ export class ReactiveFormDemoComponent implements AfterContentInit, OnInit, OnDe
         }
 
         return undefined;
+    }
+
+    protected getValidationErrorMessage() {
+        const self = this;
+        const theFunction = (controlName: string, _control: FormControl)=> {
+            const control = self.form.get(controlName) as FormControl;
+
+            if (controlName && control) {
+                if (controlName === 'name') {
+                    if (control.hasError('required')) {
+                        return 'Un nom est requis';
+                    } else if (control.hasError('maxlength')) {
+                        return 'Le nom ne doit pas être plus de 20 caracères';
+                    } else if (control.hasError('pattern')) {
+                        return 'Le nom ne doit pas contenir de caractères spéciaux';
+                    }
+                }
+            }
+            return undefined;
+        };
+
+        return theFunction;
     }
 
     protected onSubmit() {

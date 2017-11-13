@@ -68,6 +68,7 @@ import {
 
 import { MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule, MatProgressSpinnerModule, MatSidenavModule, MatTabsModule, MatToolbarModule, NoConflictStyleCompatibilityMode } from '@angular/material';
 import { DejaItemModule } from '../../src/common/core/item-list/index';
+import {DejaValidationModule} from '../../src/component/validation/index';
 import { DejaAccordionDemoComponent } from './accordion/accordion-demo.component';
 import { DejaCircularPickerDemoComponent } from './circular-picker/circular-picker-demo';
 import { DejaColorSelectorDemoComponent } from './color-selector/color-selector-demo';
@@ -178,6 +179,7 @@ import { DejaViewPortDemoComponent } from './viewport/viewport-demo';
         DejaTreeListModule,
         DejaViewPortModule,
         DejaItemModule,
+        DejaValidationModule,
         GroupingModule,
         StoreModule.forRoot({}),
         StoreModule.forFeature('userDemo', {

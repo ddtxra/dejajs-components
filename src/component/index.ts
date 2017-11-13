@@ -37,4 +37,5 @@ export * from './templates/index';
 export * from './tiles/index';
 export * from './tooltip/index';
 export * from './tree-list/index';
+export * from './validation/index';
 export * from './viewport/index';
