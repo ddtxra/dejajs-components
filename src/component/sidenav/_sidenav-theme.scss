@@ -4,20 +4,16 @@
     $primary: map-get($theme, primary);
 
     deja-sidenav {
-        @mixin sidebar-light() {
-            .mat-sidenav {
-                .header {
-                    background: mat-color($primary);
-                    .header-menu-btn .mat-icon {
-                        color: rgba(255, 255, 255, 0.87);
-                    }
-                }
-            }
-        }
-
         .mat-drawer-container {
             &.sidenav-light {
-                @include sidebar-light;
+                .mat-sidenav {
+                    .header {
+                        background: mat-color($primary);
+                        .header-menu-btn .mat-icon {
+                            color: rgba(255, 255, 255, 0.87);
+                        }
+                    }
+                }
             }
 
             .mat-sidenav {
