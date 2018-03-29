@@ -1,3 +1,9 @@
+#### 2.24.5 (2018-03-29)
+
+##### Bug Fixes
+
+* **Menu:** Fix useless mixin ([d4e4fc9a](https://github.com/DSI-HUG/dejajs-components/commit/d4e4fc9a6baee4c517a5b6f0271edb54453c49d1))
+
 #### 2.24.4 (2018-03-29)
 
 ##### Bug Fixes
