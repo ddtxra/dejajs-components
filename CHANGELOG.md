@@ -1,3 +1,9 @@
+#### 2.24.4 (2018-03-29)
+
+##### Bug Fixes
+
+* **Sidenav:** Remove useless mixin ([04d41a9b](https://github.com/DSI-HUG/dejajs-components/commit/04d41a9be4c9d5fc06466ff8ed149175d1bb2580))
+
 #### 2.24.3 (2018-02-15)
 
 ##### BREAKING CHANGES
