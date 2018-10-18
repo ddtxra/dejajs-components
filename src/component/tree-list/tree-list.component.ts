@@ -1023,9 +1023,15 @@ export class DejaTreeListComponent extends ItemListBase implements AfterViewInit
 
         return {
             dragendcallback: (event: IDejaDragEvent) => {
+                const dragObject = this.clipboardService.get('dragObject') as IItemBase;
+                if (dragObject) {
+                    debugger;
+                }
+
                 this.itemDragEnd.emit(event);
                 delete this._ddStartIndex;
                 delete this._ddTargetIndex;
+                this.clipboardService.clear();
                 this.calcViewList$().pipe(first()).subscribe(noop); // Comment this line to debug dragdrop
             },
             dragstartcallback: (event: IDejaDragEvent) => {
@@ -1034,7 +1040,9 @@ export class DejaTreeListComponent extends ItemListBase implements AfterViewInit
                     return;
                 }
                 this._ddStartIndex = index;
-                event.dragObject = this._itemList[targetIndex - this.vpStartRow];
+                const dragObject = this._itemList[targetIndex - this.vpStartRow];
+                event.dragObject = dragObject;
+                this.clipboardService.set('dragObject', dragObject);
                 this.itemDragStart.emit(event);
             },
             object: {
@@ -1049,13 +1057,18 @@ export class DejaTreeListComponent extends ItemListBase implements AfterViewInit
         }
 
         const dragcallback = (event: IDejaDragEvent) => {
-            if (this._ddStartIndex === undefined) {
-                return;
-            }
-
             const targetIndex = this.getItemIndexFromHTMLElement(event.target as HTMLElement);
             if (targetIndex === undefined) {
                 return;
+            }
+
+            if (this._ddStartIndex === undefined) {
+                const dragObject = this.clipboardService.get('dragObject') as IItemBase;
+                this._itemList.splice(targetIndex, 0, dragObject);
+                this.items = [...this._itemList];
+                this._ddStartIndex = targetIndex;
+                console.log('dragcallback');
+                console.log(dragObject);
             }
 
             // Faire calculer le target final en fonction de la hierarchie par le service
@@ -1080,13 +1093,29 @@ export class DejaTreeListComponent extends ItemListBase implements AfterViewInit
             dragentercallback: dragcallback,
             dragovercallback: dragcallback,
             dropcallback: (event: IDejaDragEvent) => {
+                console.log('dropcallback');
                 delete this._ddStartIndex;
                 delete this._ddTargetIndex;
+                this.clipboardService.clear();
                 this.drop$().pipe(
                     switchMap(() => this.calcViewList$().pipe(first())))
                     .subscribe(noop);
                 event.preventDefault();
             },
+            dragleavecallback: (_event: CustomEvent) => {
+                const dragObject = this.clipboardService.get('dragObject');
+                // External drag drop
+                if (dragObject) {
+                    const index = this._itemList.indexOf(dragObject);
+                    if (index >= 0) {
+                        console.log('dragleavecallback', index);
+                        this._itemList.splice(index, 1);
+                        this.items = [...this._itemList];
+                        this._ddStartIndex = undefined;
+                        this.clipboardService.clear();
+                    }
+                }
+            }
         };
     }
 

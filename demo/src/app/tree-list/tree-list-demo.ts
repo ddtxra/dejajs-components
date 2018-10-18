@@ -58,6 +58,7 @@ export class DejaTreeListDemoComponent implements OnDestroy {
     protected viewPortInfos$: Subscription;
     protected dialogResponse$: Subject<string> = new Subject<string>();
     protected loremList: IItemTree[] = [];
+    protected loremList2: IItemTree[] = [];
 
     private countries: Observable<Country[]>;
     public deepCountries: Observable<any>;
@@ -100,9 +101,16 @@ export class DejaTreeListDemoComponent implements OnDestroy {
             this.loremList[i].displayName = `${i} - Une ligne de test avec une taille de : ${rand}`;
         }
 
-        groupingService.group(this.loremList, [{ groupByField: 'height' }]).then((groupedResult) => {
-            this.loremList = groupedResult;
-        });
+        for (let i = 0; i < 50; i++) {
+            const rand = Math.floor(Math.random() * (70 - 33 + 1)) + 33; // random de 33 à 70
+            this.loremList2[i] = {} as IItemTree;
+            this.loremList2[i].size = rand;
+            this.loremList2[i].displayName = `${i} - Une autre ligne avec une taille de : ${rand}`;
+        }
+
+        // groupingService.group(this.loremList, [{ groupByField: 'height' }]).then((groupedResult) => {
+        //     this.loremList = groupedResult;
+        // });
 
         this.country = new Country();
         this.country.code = 'CH';

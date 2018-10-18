@@ -28,6 +28,7 @@ export class DejaClipboardService {
     }
 
     public clear() {
+        console.log('DejaClipboardService clear');
         this.clipboard = {};
     }
 }

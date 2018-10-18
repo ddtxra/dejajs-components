@@ -228,7 +228,7 @@ export class ItemListService {
     public setItems$(items: any[] | Promise<any[]> | Observable<any[]>) {
         if (!items) {
             this.items = undefined;
-            return observableOf(null);
+            return observableOf([]);
         } else if (items instanceof Array) {
             this.ensureChildrenProperties(items);
             this.ensureSelectedItems(items);
