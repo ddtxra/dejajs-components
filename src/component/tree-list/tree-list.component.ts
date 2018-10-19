@@ -1025,7 +1025,7 @@ export class DejaTreeListComponent extends ItemListBase implements AfterViewInit
             dragendcallback: (event: IDejaDragEvent) => {
                 const dragObject = this.clipboardService.get('dragObject') as IItemBase;
                 if (dragObject) {
-                    debugger;
+                    // debugger;
                 }
 
                 this.itemDragEnd.emit(event);
@@ -1112,7 +1112,7 @@ export class DejaTreeListComponent extends ItemListBase implements AfterViewInit
                         this._itemList.splice(index, 1);
                         this.items = [...this._itemList];
                         this._ddStartIndex = undefined;
-                        this.clipboardService.clear();
+                        // this.clipboardService.clear();
                     }
                 }
             }
