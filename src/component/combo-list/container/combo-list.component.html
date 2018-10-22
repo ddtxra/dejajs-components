@@ -1,7 +1,7 @@
-<deja-combo-list-child [items]="state.selectable" [itemsBuffer]="state.selectableBuffer" [labelFieldName]="labelFieldName"
-    (action)="toSelectListAction($event)" [disabled]="disabled"></deja-combo-list-child>
+<deja-combo-list-child class="noselect" #left [items]="state.selectable" [itemsBuffer]="state.selectableBuffer" [labelFieldName]="labelFieldName" (action)="toSelectListAction($event)" [disabled]="disabled" [deja-mouse-draggable]="getDragContext(left)" [deja-mouse-droppable]="getDropContext(left)"></deja-combo-list-child>
 
 <deja-combo-list-actionbar [disabled]="disabled" [disableFastActions]="disableFastActions" class="combo-list-action" (action)="actionBarAction($event)"></deja-combo-list-actionbar>
 
-<deja-combo-list-child [items]="state.selected" [itemsBuffer]="state.selectedBuffer" [labelFieldName]="labelFieldName" (action)="selectedListAction($event)"
-    [disabled]="disabled"></deja-combo-list-child>
+<deja-combo-list-child class="noselect" #right [items]="state.selected" [itemsBuffer]="state.selectedBuffer" [labelFieldName]="labelFieldName" (action)="selectedListAction($event)" [disabled]="disabled" [deja-mouse-draggable]="getDragContext(right)" [deja-mouse-droppable]="getDropContext(right)"></deja-combo-list-child>
+
+<deja-mouse-dragdrop-cursor></deja-mouse-dragdrop-cursor>

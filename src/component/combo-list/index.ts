@@ -8,6 +8,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DejaMouseDragDropModule } from '../mouse-dragdrop/index';
+import { DejaMouseDragDropService } from '../mouse-dragdrop/mouse-dragdrop.service';
 import { DejaComboListActionbarComponent } from './component/combo-list-actionbar/combo-list-actionbar.component';
 import { DejaComboListChildComponent } from './component/combo-list-child/combo-list-child.component';
 import { DejaComboListComponent } from './container/combo-list.component';
@@ -21,10 +23,11 @@ import {
 @NgModule({
     imports: [
         CommonModule,
+        FormsModule,
         MatIconModule,
         MatListModule,
         MatButtonModule,
-        FormsModule,
+        DejaMouseDragDropModule,
     ],
     declarations: [
         DejaComboListComponent,
@@ -35,6 +38,9 @@ import {
         DejaComboListComponent,
         DejaComboListChildComponent,
     ],
+    providers: [
+        DejaMouseDragDropService,
+    ]
 })
 export class DejaComboListModule { }
 

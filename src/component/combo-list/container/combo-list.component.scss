@@ -1,6 +1,6 @@
 @import '~@angular/material/theming';
 
-:host {
+deja-combo-list {
     @include mat-elevation(1);
     overflow-y: auto;
     display: flex;
@@ -15,4 +15,21 @@
         flex-direction: column;
     }
 
+    .mat-list-text {
+        height: 100%;
+        display: flex;
+        justify-content: center;        
+    }
+}
+
+.combo-list-cursor {
+    #content {
+        max-width: 5rem !important;
+        height: 2rem !important;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        opacity: 0.8;
+        background-color: crimson;
+    }
 }

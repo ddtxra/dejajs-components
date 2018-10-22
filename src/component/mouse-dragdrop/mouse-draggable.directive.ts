@@ -7,7 +7,7 @@
  */
 
 import { Directive, ElementRef, Input, OnDestroy } from '@angular/core';
-import { fromEvent as observableFromEvent, merge as observableMerge, Observable, Subject } from 'rxjs';
+import { from as observableFrom, fromEvent as observableFromEvent, merge as observableMerge, Observable, Subject } from 'rxjs';
 import { filter, first, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Position } from '../../common/core/graphics/position';
 import { Rect } from '../../common/core/graphics/rect';
@@ -47,7 +47,10 @@ export class DejaMouseDraggableDirective implements OnDestroy {
                         let target: HTMLElement;
 
                         const match = (el: HTMLElement) => {
-                            return el.tagName === this.context.target.toUpperCase() || el.id === this.context.target.substr(1) || el.hasAttribute(this.context.target.substring(1, this.context.target.length - 1));
+                            return el.tagName === this.context.target.toUpperCase() ||
+                                (this.context.target.startsWith('#') && el.id === this.context.target.substr(1)) ||
+                                (this.context.target.startsWith('.') && el.classList.contains(this.context.target.substr(1))) ||
+                                (this.context.target.startsWith('[') && el.hasAttribute(this.context.target.substring(1, this.context.target.length - 1)));
                         };
 
                         const startDrag = () => {
@@ -57,6 +60,13 @@ export class DejaMouseDraggableDirective implements OnDestroy {
                                     dragDropService.dragCursor$.next(undefined);
                                     dragDropService.dragging$.next(false);
                                 }));
+
+
+                            observableFromEvent(element, 'drag').pipe(
+                                takeUntil(kill$))
+                                .subscribe((ev: DragEvent) => {
+                                    console.log('drag', ev);
+                                });
 
                             observableFromEvent(element.ownerDocument, 'mousemove').pipe(
                                 takeUntil(kill$))
@@ -84,8 +94,19 @@ export class DejaMouseDraggableDirective implements OnDestroy {
                                     return false;
                                 });
 
+                            observableFrom(dragDropService.dropCursor$).pipe(
+                                takeWhile(() => this.isAlive),
+                                filter((value) => !dragDropService.isDragging && value === undefined),
+                                first())
+                                .subscribe(() => {
+                                    if (this.context.dragEnd) {
+                                        this.context.dragEnd();
+                                    }
+                                });
+
                             dragDropService.dragging$.next(true);
                         };
+
 
                         if (this.context) {
                             if (this.context.target) {
@@ -132,4 +153,5 @@ export interface IDejaMouseDraggableContext {
     target?: string; // Tagname or #id or [attribute]
     className?: string;
     dragStart?(element: HTMLElement): any; // Return object or observable<object>
+    dragEnd?(): void;
 }

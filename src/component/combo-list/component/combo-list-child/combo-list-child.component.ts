@@ -6,13 +6,8 @@
  *  found in the LICENSE file at https://github.com/DSI-HUG/dejajs-components/blob/master/LICENSE
  */
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-    Component,
-    EventEmitter,
-    Input,
-    Output
-} from '@angular/core';
-import { MatSelectionListChange } from '@angular/material';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, OnInit } from '@angular/core';
+import { MatOption, MatSelectionListChange } from '@angular/material';
 import { IDejaAction } from '../../../../common/core/action.interface';
 
 @Component({
@@ -20,12 +15,17 @@ import { IDejaAction } from '../../../../common/core/action.interface';
     templateUrl: './combo-list-child.component.html',
     styleUrls: ['./combo-list-child.component.scss'],
 })
-export class DejaComboListChildComponent<T> {
+export class DejaComboListChildComponent<T> implements OnInit {
 
     @Input() public items: Array<T>;
     @Input() public itemsBuffer: Array<T> = [];
     @Input() public labelFieldName: string;
     @Output() public action = new EventEmitter<IDejaAction>();
+
+    @ViewChildren('listOption') private options: QueryList<MatOption>;
+
+    // Empty item compatible with T
+    public emptyItem: T;
 
     private _disabled: boolean;
 
@@ -40,6 +40,10 @@ export class DejaComboListChildComponent<T> {
 
     private lastClick = Date.now();
     private lastItem: T;
+
+    public ngOnInit(): void {
+        this.emptyItem = { [this.labelFieldName]: ' ' } as any;
+    }
 
     public stateChange(event: MatSelectionListChange) {
         if (!this.disabled) {
@@ -77,4 +81,12 @@ export class DejaComboListChildComponent<T> {
         this.action.emit(action);
     }
 
+    public HitTest(pageX: number, pageY: number) {
+        return this.options.find((option: any) => {
+            // TODO trouver une meilleure solution (Eventuellemnt encapsule mat-list-option adans un div)
+            const element = option._element.nativeElement as HTMLElement;
+            const bounds = element.getBoundingClientRect();
+            return bounds.left <= pageX && bounds.right >= pageX && bounds.top <= pageY && bounds.bottom >= pageY;
+        });
+    }
 }
